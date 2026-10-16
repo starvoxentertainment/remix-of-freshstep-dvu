@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { startClickTracking, trackPageView } from "../lib/analytics";
 
 const GTM_CONTAINER_ID = "GTM-KW578VQ9";
 
@@ -136,6 +137,15 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  useEffect(() => {
+    trackPageView();
+    const stopClicks = startClickTracking();
+    const stopNav = router.subscribe("onResolved", (e) => {
+      if (e.pathChanged) setTimeout(trackPageView, 0);
+    });
+    return () => { stopClicks(); stopNav(); };
+  }, [router]);
 
   return (
     <QueryClientProvider client={queryClient}>

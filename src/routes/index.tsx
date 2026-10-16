@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/SiteShell";
+import { track } from "@/lib/analytics";
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, MotionConfig, type MotionValue } from "motion/react";
 import anna from "@/assets/anna-real.jpg";
@@ -342,7 +343,7 @@ function Specialties() {
               <div className="p-6">
                 <h3 className="text-2xl leading-tight">{s.t}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
-                <a href={`/${s.slug}`} className="mt-4 inline-block text-sm font-semibold text-secondary underline decoration-primary underline-offset-4">Learn more →</a>
+                <a href={`/${s.slug}`} data-track="specialty_click" data-track-label={s.t} className="mt-4 inline-block text-sm font-semibold text-secondary underline decoration-primary underline-offset-4">Learn more →</a>
               </div>
             </motion.article>
           </Pop>
@@ -470,7 +471,18 @@ function WhyMe() {
 
 function Contact() {
   const [sent, setSent] = useState(false);
-  const submit = (e: FormEvent) => { e.preventDefault(); setSent(true); };
+  const started = useRef(false);
+  const onStart = () => {
+    if (started.current) return;
+    started.current = true;
+    track("form_start", { form_name: "consultation", page_path: window.location.pathname });
+  };
+  const submit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const msg = (e.currentTarget.elements.namedItem("message") as HTMLTextAreaElement | null)?.value.trim();
+    track("generate_lead", { form_name: "consultation", page_path: window.location.pathname, has_message: Boolean(msg) });
+    setSent(true);
+  };
   const field = "w-full rounded-2xl border border-input bg-card px-5 py-4 outline-none placeholder:text-muted-foreground focus:border-secondary";
   const steps = ["Reach out", "Free consultation", "First session"];
   return (
@@ -495,11 +507,11 @@ function Contact() {
             {sent ? (
               <p className="font-serif text-3xl text-secondary">Thank you — Anna will be in touch soon. ♡</p>
             ) : (
-              <form onSubmit={submit} className="space-y-4">
+              <form onSubmit={submit} onFocus={onStart} className="space-y-4">
                 <p className="font-hand text-3xl text-secondary">Book a free, confidential consultation</p>
                 <input required placeholder="Your name" className={field} />
                 <input required type="email" placeholder="Email" className={field} />
-                <textarea rows={4} placeholder="What brings you here? (optional)" className={field} />
+                <textarea name="message" rows={4} placeholder="What brings you here? (optional)" className={field} />
                 <button className="w-full rounded-full bg-secondary px-7 py-4 font-semibold text-secondary-foreground transition hover:opacity-90">Request consultation →</button>
               </form>
             )}
