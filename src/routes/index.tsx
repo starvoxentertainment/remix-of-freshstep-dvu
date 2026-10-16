@@ -3,7 +3,7 @@ import { SiteFooter } from "@/components/SiteShell";
 import { track } from "@/lib/analytics";
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, MotionConfig, type MotionValue } from "motion/react";
-import anna from "@/assets/anna-real.jpg";
+import anna from "@/assets/anna-hero.jpg";
 import annaHusband from "@/assets/anna-husband.jpg";
 import annaKoba from "@/assets/anna-koba.jpg";
 import tea from "@/assets/cozy-tea.jpg";
