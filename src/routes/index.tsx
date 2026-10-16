@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { SPECIALTIES } from "@/lib/specialties";
+import { SiteFooter } from "@/components/SiteShell";
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, MotionConfig, type MotionValue } from "motion/react";
 import anna from "@/assets/anna-real.jpg";
@@ -9,9 +11,9 @@ import plant from "@/assets/cozy-plant.jpg";
 import mugs from "@/assets/cozy-mugs.jpg";
 import walk from "@/assets/cozy-walk.jpg";
 
-const TITLE = "Fresh Step Therapy — Anna Soroka, Registered Psychotherapist";
+const TITLE = "Online Psychotherapy in Ontario — Anna Soroka, RP | Fresh Step Therapy";
 const DESC =
-  "Warm, judgment-free therapy for body image, body dysmorphia, disordered eating, confidence and couples with Anna Soroka, RP (CRPO). Book a free consultation.";
+  "Warm, judgment-free online therapy across Ontario for body image, body dysmorphia, disordered eating, confidence and couples with Anna Soroka, RP (CRPO). Book a free consultation.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,6 +24,28 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "/" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          name: "Fresh Step Therapy",
+          description: DESC,
+          areaServed: { "@type": "AdministrativeArea", name: "Ontario, Canada" },
+          serviceType: ["Psychotherapy", "Online therapy", "Couples therapy"],
+          founder: {
+            "@type": "Person",
+            name: "Anna Soroka",
+            jobTitle: "Registered Psychotherapist",
+            hasCredential: "Registered Psychotherapist, College of Registered Psychotherapists of Ontario (CRPO)",
+          },
+          knowsAbout: ["Body dysmorphia", "Body image", "Disordered eating", "Emotional eating", "Couples therapy", "Self-esteem", "Anxiety"],
+        }),
+      },
     ],
   }),
   component: Index,
@@ -106,9 +130,10 @@ function Nav() {
           Fresh <em className="text-primary">Step</em>
         </a>
         <nav className="hidden gap-8 text-sm md:flex">
-          <a href="#about" className={link}>About</a>
+          <Link to="/about" className={link}>About</Link>
           <a href="#specialties" className={link}>Specialties</a>
           <a href="#approach" className={link}>Approach</a>
+          <Link to="/faq" className={link}>FAQ</Link>
         </nav>
         <a href="#contact" className="rounded-full bg-secondary px-5 py-2.5 text-sm font-semibold text-secondary-foreground transition hover:opacity-90">
           Book a free consult
@@ -299,10 +324,10 @@ function Quote() {
 }
 
 const specialties = [
-  { t: "Body Dysmorphia & Body Image", d: "For the constant checking, comparing and fixation on appearance — toward peace, not forced positivity.", img: plant },
-  { t: "Disordered & Emotional Eating", d: "Breaking free from diet culture and cycles of restriction, bingeing or food noise.", img: tea },
-  { t: "Couples Therapy", d: "Communication, trust, conflict and reconnection, grounded in the Gottman Method.", img: mugs },
-  { t: "Confidence & Self-Worth", d: "Perfectionism, burnout, and self-worth tied to appearance or achievement.", img: walk },
+  { t: "Body Dysmorphia & Body Image", d: "For the constant checking, comparing and fixation on appearance — toward peace, not forced positivity.", img: plant, slug: "body-dysmorphia-therapy" },
+  { t: "Disordered & Emotional Eating", d: "Breaking free from diet culture and cycles of restriction, bingeing or food noise.", img: tea, slug: "disordered-eating-therapy" },
+  { t: "Couples Therapy", d: "Communication, trust, conflict and reconnection, grounded in the Gottman Method.", img: mugs, slug: "couples-therapy" },
+  { t: "Confidence & Self-Worth", d: "Perfectionism, burnout, and self-worth tied to appearance or achievement.", img: walk, slug: "confidence-self-esteem-therapy" },
 ];
 
 function Specialties() {
@@ -318,6 +343,7 @@ function Specialties() {
               <div className="p-6">
                 <h3 className="text-2xl leading-tight">{s.t}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
+                <a href={`/${s.slug}`} className="mt-4 inline-block text-sm font-semibold text-secondary underline decoration-primary underline-offset-4">Learn more →</a>
               </div>
             </motion.article>
           </Pop>
@@ -487,13 +513,9 @@ function Contact() {
 
 function Footer() {
   return (
-    <footer>
+    <>
       <Wave fill="fill-secondary" />
-      <div className="bg-secondary px-6 py-16 text-center text-secondary-foreground">
-        <p className="font-serif text-3xl">Fresh <em className="text-primary">Step</em> Therapy</p>
-        <p className="mt-2 font-hand text-2xl">with Anna Soroka, RP</p>
-        <p className="mt-6 text-sm opacity-80">Ontario · © {new Date().getFullYear()}</p>
-      </div>
-    </footer>
+      <SiteFooter />
+    </>
   );
 }

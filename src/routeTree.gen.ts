@@ -10,33 +10,116 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as BodyDysmorphiaTherapyRouteImport } from './routes/body-dysmorphia-therapy'
+import { Route as ConfidenceSelfEsteemTherapyRouteImport } from './routes/confidence-self-esteem-therapy'
+import { Route as CouplesTherapyRouteImport } from './routes/couples-therapy'
+import { Route as DisorderedEatingTherapyRouteImport } from './routes/disordered-eating-therapy'
+import { Route as FaqRouteImport } from './routes/faq'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BodyDysmorphiaTherapyRoute = BodyDysmorphiaTherapyRouteImport.update({
+  id: '/body-dysmorphia-therapy',
+  path: '/body-dysmorphia-therapy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfidenceSelfEsteemTherapyRoute =
+  ConfidenceSelfEsteemTherapyRouteImport.update({
+    id: '/confidence-self-esteem-therapy',
+    path: '/confidence-self-esteem-therapy',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const CouplesTherapyRoute = CouplesTherapyRouteImport.update({
+  id: '/couples-therapy',
+  path: '/couples-therapy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisorderedEatingTherapyRoute = DisorderedEatingTherapyRouteImport.update({
+  id: '/disordered-eating-therapy',
+  path: '/disordered-eating-therapy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/body-dysmorphia-therapy': typeof BodyDysmorphiaTherapyRoute
+  '/confidence-self-esteem-therapy': typeof ConfidenceSelfEsteemTherapyRoute
+  '/couples-therapy': typeof CouplesTherapyRoute
+  '/disordered-eating-therapy': typeof DisorderedEatingTherapyRoute
+  '/faq': typeof FaqRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/body-dysmorphia-therapy': typeof BodyDysmorphiaTherapyRoute
+  '/confidence-self-esteem-therapy': typeof ConfidenceSelfEsteemTherapyRoute
+  '/couples-therapy': typeof CouplesTherapyRoute
+  '/disordered-eating-therapy': typeof DisorderedEatingTherapyRoute
+  '/faq': typeof FaqRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/body-dysmorphia-therapy': typeof BodyDysmorphiaTherapyRoute
+  '/confidence-self-esteem-therapy': typeof ConfidenceSelfEsteemTherapyRoute
+  '/couples-therapy': typeof CouplesTherapyRoute
+  '/disordered-eating-therapy': typeof DisorderedEatingTherapyRoute
+  '/faq': typeof FaqRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/body-dysmorphia-therapy'
+    | '/confidence-self-esteem-therapy'
+    | '/couples-therapy'
+    | '/disordered-eating-therapy'
+    | '/faq'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/body-dysmorphia-therapy'
+    | '/confidence-self-esteem-therapy'
+    | '/couples-therapy'
+    | '/disordered-eating-therapy'
+    | '/faq'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/body-dysmorphia-therapy'
+    | '/confidence-self-esteem-therapy'
+    | '/couples-therapy'
+    | '/disordered-eating-therapy'
+    | '/faq'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BodyDysmorphiaTherapyRoute: typeof BodyDysmorphiaTherapyRoute
+  ConfidenceSelfEsteemTherapyRoute: typeof ConfidenceSelfEsteemTherapyRoute
+  CouplesTherapyRoute: typeof CouplesTherapyRoute
+  DisorderedEatingTherapyRoute: typeof DisorderedEatingTherapyRoute
+  FaqRoute: typeof FaqRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +131,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/body-dysmorphia-therapy': {
+      id: '/body-dysmorphia-therapy'
+      path: '/body-dysmorphia-therapy'
+      fullPath: '/body-dysmorphia-therapy'
+      preLoaderRoute: typeof BodyDysmorphiaTherapyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confidence-self-esteem-therapy': {
+      id: '/confidence-self-esteem-therapy'
+      path: '/confidence-self-esteem-therapy'
+      fullPath: '/confidence-self-esteem-therapy'
+      preLoaderRoute: typeof ConfidenceSelfEsteemTherapyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/couples-therapy': {
+      id: '/couples-therapy'
+      path: '/couples-therapy'
+      fullPath: '/couples-therapy'
+      preLoaderRoute: typeof CouplesTherapyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disordered-eating-therapy': {
+      id: '/disordered-eating-therapy'
+      path: '/disordered-eating-therapy'
+      fullPath: '/disordered-eating-therapy'
+      preLoaderRoute: typeof DisorderedEatingTherapyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BodyDysmorphiaTherapyRoute: BodyDysmorphiaTherapyRoute,
+  ConfidenceSelfEsteemTherapyRoute: ConfidenceSelfEsteemTherapyRoute,
+  CouplesTherapyRoute: CouplesTherapyRoute,
+  DisorderedEatingTherapyRoute: DisorderedEatingTherapyRoute,
+  FaqRoute: FaqRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
