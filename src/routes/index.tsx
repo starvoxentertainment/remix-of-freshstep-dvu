@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SPECIALTIES } from "@/lib/specialties";
 import { SiteFooter } from "@/components/SiteShell";
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, MotionConfig, type MotionValue } from "motion/react";
