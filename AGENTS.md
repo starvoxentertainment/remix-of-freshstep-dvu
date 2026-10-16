@@ -12,3 +12,4 @@
 ## Conventions
 
 - Third-party page scripts (tag manager, analytics) are injected in the root shell in `src/routes/__root.tsx` — the head bootstrap plus the `<noscript>` fallback in `<body>` — so every route carries them without duplicating the snippet per page.
+- Analytics events go to the GTM dataLayer via `src/lib/analytics.ts` (one delegated click listener + route-change page views); GA4 tags/triggers live in the GTM container, not in site code — keeps tracking config editable without deploys.
