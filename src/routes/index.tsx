@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { SiteFooter } from "@/components/SiteShell";
 import { track } from "@/lib/analytics";
+import { submitConsultation } from "@/lib/consultation.functions";
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, MotionConfig, type MotionValue } from "motion/react";
 import anna from "@/assets/anna-hero-office.jpg";
@@ -471,17 +473,35 @@ function WhyMe() {
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const sendConsultation = useServerFn(submitConsultation);
   const started = useRef(false);
   const onStart = () => {
     if (started.current) return;
     started.current = true;
     track("form_start", { form_name: "consultation", page_path: window.location.pathname });
   };
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const msg = (e.currentTarget.elements.namedItem("message") as HTMLTextAreaElement | null)?.value.trim();
-    track("generate_lead", { form_name: "consultation", page_path: window.location.pathname, has_message: Boolean(msg) });
-    setSent(true);
+    if (sending) return;
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem("name") as HTMLInputElement | null)?.value.trim() ?? "";
+    const email = (form.elements.namedItem("email") as HTMLInputElement | null)?.value.trim() ?? "";
+    const message = (form.elements.namedItem("message") as HTMLTextAreaElement | null)?.value.trim();
+    setSending(true);
+    setError(null);
+    try {
+      await sendConsultation({
+        data: { name, email, message: message || undefined, pagePath: window.location.pathname },
+      });
+      track("generate_lead", { form_name: "consultation", page_path: window.location.pathname, has_message: Boolean(message) });
+      setSent(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
   const field = "w-full rounded-2xl border border-input bg-card px-5 py-4 outline-none placeholder:text-muted-foreground focus:border-secondary";
   const steps = ["Reach out", "Free consultation", "First session"];
@@ -509,10 +529,13 @@ function Contact() {
             ) : (
               <form onSubmit={submit} onFocus={onStart} className="space-y-4">
                 <p className="font-hand text-3xl text-secondary">Book a free, confidential consultation</p>
-                <input required placeholder="Your name" className={field} />
-                <input required type="email" placeholder="Email" className={field} />
-                <textarea name="message" rows={4} placeholder="What brings you here? (optional)" className={field} />
-                <button className="w-full rounded-full bg-secondary px-7 py-4 font-semibold text-secondary-foreground transition hover:opacity-90">Request consultation →</button>
+                <input required name="name" maxLength={100} autoComplete="name" placeholder="Your name" className={field} />
+                <input required name="email" type="email" maxLength={255} autoComplete="email" placeholder="Email" className={field} />
+                <textarea name="message" rows={4} maxLength={2000} placeholder="What brings you here? (optional)" className={field} />
+                {error && <p className="text-sm font-semibold text-destructive">{error}</p>}
+                <button disabled={sending} className="w-full rounded-full bg-secondary px-7 py-4 font-semibold text-secondary-foreground transition hover:opacity-90 disabled:opacity-60">
+                  {sending ? "Sending…" : "Request consultation →"}
+                </button>
               </form>
             )}
           </div>
