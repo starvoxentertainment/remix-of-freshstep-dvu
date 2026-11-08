@@ -1,0 +1,1 @@
+CREATE TABLE public.consultation_submissions (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, email TEXT NOT NULL, message TEXT, page_path TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now()); GRANT ALL ON public.consultation_submissions TO service_role; ALTER TABLE public.consultation_submissions ENABLE ROW LEVEL SECURITY;
