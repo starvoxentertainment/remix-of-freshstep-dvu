@@ -18,7 +18,7 @@ function escapeHtml(s: string) {
 }
 
 export const submitConsultation = createServerFn({ method: "POST" })
-  .inputValidator((data) => consultationSchema.parse(data))
+  .validator((data) => consultationSchema.parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
